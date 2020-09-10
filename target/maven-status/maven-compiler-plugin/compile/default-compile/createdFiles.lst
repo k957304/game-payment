@@ -1,0 +1,9 @@
+game\PolicyHandler.class
+game\AccountController.class
+game\AbstractEvent.class
+game\AccountRepository.class
+game\PaymentApplication.class
+game\AbstractEvent$1.class
+game\Account.class
+game\Used.class
+game\config\kafka\KafkaProcessor.class
