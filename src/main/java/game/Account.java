@@ -13,7 +13,16 @@ public class Account {
     private Long id;
     @Column(name="giftId")
     private Long giftId;
+    @Column(name="giftId")
+    private String giftStatus;
 
+    public String getGiftStatus() {
+        return giftStatus;
+    }
+
+    public void setGiftStatus(String giftStatus) {
+        this.giftStatus = giftStatus;
+    }
 
     public Long getId() {
         return id;
