@@ -25,9 +25,7 @@ public class PolicyHandler{
         if(used.isMe()){
             Account account = new Account();
             account.setGiftId(used.getId());
-
             accountRepository.save(account);
-
             System.out.println("##### listener Payout : " + used.toJson());
         }
     }
