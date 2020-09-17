@@ -13,7 +13,7 @@ public class Account {
     private Long id;
     @Column(name="giftId")
     private Long giftId;
-    @Column(name="giftId")
+    @Column(name="giftStatus")
     private String giftStatus;
 
     public String getGiftStatus() {
