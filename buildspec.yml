@@ -74,26 +74,55 @@ phases:
                   app: $_PROJECT_NAME
               spec:
                 containers:
-                  - name: $_PROJECT_NAME
-                    image: $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$_PROJECT_NAME:$CODEBUILD_RESOLVED_SOURCE_VERSION
-                    ports:
-                      - containerPort: 8080
-                    readinessProbe:
-                      httpGet:
-                        path: /actuator/health
-                        port: 8080
-                      initialDelaySeconds: 150
-                      timeoutSeconds: 2
-                      periodSeconds: 5
-                      failureThreshold: 10
-                    livenessProbe:
-                      httpGet:
-                        path: /actuator/health
-                        port: 8080
-                      initialDelaySeconds: 150
-                      timeoutSeconds: 2
-                      periodSeconds: 5
-                      failureThreshold: 5
+                - env:
+                  - name: DB_URL
+                    valueFrom:
+                      configMapKeyRef:
+                        name: admin07-config
+                        key: DB_URL
+                  - name: DB_USER
+                    valueFrom:
+                      configMapKeyRef:
+                        name: admin07-config
+                        key: DB_USER
+                  - name: DB_PASSWORD
+                    valueFrom:
+                      configMapKeyRef:
+                        name: admin07-config
+                        key: DB_PASSWORD
+                  name: $_PROJECT_NAME
+                  image: $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$_PROJECT_NAME:$CODEBUILD_RESOLVED_SOURCE_VERSION
+                  ports:
+                    - containerPort: 8080
+                  readinessProbe:
+                    httpGet:
+                      path: /actuator/health
+                      port: 8080
+                    initialDelaySeconds: 150
+                    timeoutSeconds: 2
+                    periodSeconds: 5
+                    failureThreshold: 10
+                  livenessProbe:
+                    exec:
+                      command:
+                      - cat
+                      - /mnt/aws/healthy
+                    initialDelaySeconds: 150
+                    timeoutSeconds: 2
+                    periodSeconds: 5
+                    failureThreshold: 5
+                  resources:
+                    requests:
+                      cpu: 500m
+                    limits:
+                      cpu: 800m
+                  volumeMounts:
+                  - mountPath: "/mnt/aws"
+                    name: volume
+                volumes:
+                  - name: volume
+                    persistentVolumeClaim:
+                      claimName: aws-efs
           EOF
 cache:
   paths:
